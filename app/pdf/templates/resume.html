@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+/*
+  ╔══════════════════════════════════════════════════════════════╗
+  ║         ATS-COMPLIANT RESUME TEMPLATE  v3.0                 ║
+  ╚══════════════════════════════════════════════════════════════╝
+*/
+
+  @page {
+    size: A4;
+    margin: 18mm 22mm 18mm 22mm;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.48;
+    color: #1c1c1c;
+  }
+
+  /* ── HEADER ──────────────────────────────────────────────────── */
+  .resume-header {
+    text-align: center;
+    padding-bottom: 9pt;
+    margin-bottom: 2pt;
+    border-bottom: 2.5pt solid #1a3c5e;
+  }
+
+  .candidate-name {
+    font-size: 23pt;
+    font-weight: 700;
+    color: #1a3c5e;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 5pt;
+    line-height: 1.1;
+  }
+
+  .contact-bar {
+    font-size: 9pt;
+    color: #3d3d3d;
+    line-height: 1.7;
+  }
+
+  .contact-sep {
+    color: #1a3c5e;
+    font-weight: 700;
+    margin: 0 4pt;
+  }
+
+  /* ── SECTION WRAPPER ─────────────────────────────────────────── */
+  .section {
+    margin-bottom: 1pt;
+    page-break-inside: avoid;
+  }
+
+  .section-title {
+    font-size: 9.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #1a3c5e;
+    border-bottom: 1.5pt solid #1a3c5e;
+    padding-bottom: 2pt;
+    margin-top: 12pt;
+    margin-bottom: 5pt;
+  }
+
+  /* ── SUMMARY ─────────────────────────────────────────────────── */
+  .summary-body {
+    font-size: 10.5pt;
+    line-height: 1.52;
+    text-align: justify;
+    color: #1c1c1c;
+  }
+
+  /* ── SECTION BODY (Experience / Education / Projects / Skills) ──
+     white-space: pre-wrap preserves LLM line-breaks & bullets
+     without forcing a monospace font.
+     The | safe filter allows <strong> tags from the LLM to render.
+  */
+  .section-body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.52;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #1c1c1c;
+  }
+
+  /* Bold job titles / project names / degree names injected by LLM */
+  .section-body strong {
+    font-weight: 700;
+    color: #1c1c1c;
+  }
+
+  /* ── SKILLS TABLE ────────────────────────────────────────────── */
+  .skills-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10.5pt;
+  }
+
+  .skills-table td {
+    vertical-align: top;
+    padding-bottom: 4pt;
+  }
+
+  /* Left column: category label — fixed width, bold, navy */
+  .skill-label {
+    font-weight: 700;
+    color: #1a3c5e;
+    white-space: nowrap;
+    width: 120pt;
+    padding-right: 8pt;
+  }
+
+  /* Right column: comma-separated skill values */
+  .skill-values {
+    color: #1c1c1c;
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════════ -->
+  <div class="resume-header">
+
+    {% if name %}
+    <div class="candidate-name">{{ name }}</div>
+    {% endif %}
+
+    {% set contact_parts = [] %}
+    {% if contact %}
+      {% if contact.phone    %}{% set _ = contact_parts.append(contact.phone)    %}{% endif %}
+      {% if contact.email    %}{% set _ = contact_parts.append(contact.email)    %}{% endif %}
+      {% if contact.location %}{% set _ = contact_parts.append(contact.location) %}{% endif %}
+      {% if contact.linkedin %}{% set _ = contact_parts.append(contact.linkedin) %}{% endif %}
+      {% if contact.github   %}{% set _ = contact_parts.append(contact.github)   %}{% endif %}
+    {% endif %}
+
+    {% if contact_parts %}
+    <div class="contact-bar">
+      {% for part in contact_parts %}
+        {{ part }}{% if not loop.last %}<span class="contact-sep"> | </span>{% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+
+
+  <!-- ═══════════════════════ PROFESSIONAL SUMMARY ═════════════ -->
+  {% if summary %}
+  <div class="section">
+    <div class="section-title">Professional Summary</div>
+    <div class="summary-body">{{ summary }}</div>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════ WORK EXPERIENCE ══════════════════ -->
+  <!--
+    Uses | safe so that <strong>Job Title — Company | Loc | Dates</strong>
+    injected by the LLM renders as bold instead of escaped HTML text.
+    The LLM is instructed to ONLY wrap the header line in <strong>.
+  -->
+  {% if experience %}
+  <div class="section">
+    <div class="section-title">Work Experience</div>
+    <div class="section-body">{{ experience | safe }}</div>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════ EDUCATION ════════════════════════ -->
+  <!--
+    Uses | safe so that <strong>Degree Name</strong> on line 1
+    renders bold, with institution + year on line 2 in normal weight.
+  -->
+  {% if education %}
+  <div class="section">
+    <div class="section-title">Education</div>
+    <div class="section-body">{{ education | safe }}</div>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════ PROJECTS ═════════════════════════ -->
+  <!--
+    Uses | safe so that <strong>Project Name</strong> renders bold.
+    Section is hidden entirely if the LLM returns an empty string.
+  -->
+  {% if projects %}
+  <div class="section">
+    <div class="section-title">Projects</div>
+    <div class="section-body">{{ projects | safe }}</div>
+  </div>
+  {% endif %}
+
+
+  <!-- ═══════════════════════ SKILLS ═══════════════════════════ -->
+  <!--
+    Parse "Category: skill1, skill2" lines into a two-column table.
+    Left cell = bold navy label. Right cell = skill list.
+    Falls back to a plain row for any line without a colon.
+  -->
+  {% if skills %}
+  <div class="section">
+    <div class="section-title">Skills</div>
+    <table class="skills-table">
+      {% for line in skills.split('\n') %}
+        {% set stripped = line.strip() %}
+        {% if stripped %}
+          {% if ':' in stripped %}
+            {% set parts = stripped.split(':', 1) %}
+            <tr>
+              <td class="skill-label">{{ parts[0].strip() }}:</td>
+              <td class="skill-values">{{ parts[1].strip() }}</td>
+            </tr>
+          {% else %}
+            <tr>
+              <td class="skill-values" colspan="2">{{ stripped }}</td>
+            </tr>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+
+
+</body>
+</html>
