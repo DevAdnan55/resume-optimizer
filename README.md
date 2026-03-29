@@ -6,6 +6,18 @@ An AI-powered resume rewriter built with **Streamlit** and **GPT-4o-mini**. Uplo
 
 ---
 
+## Screenshots
+
+| Step 1 — Upload & Parse | Step 2 — Optimizing |
+|---|---|
+| ![Upload and Parse](screenshots/1_upload_parse.png) | ![Optimizing](screenshots/2_optimizing.png) |
+
+| Step 2 — Result | Step 3 — Download PDF |
+|---|---|
+| ![Result](screenshots/3_result.png) | ![Download PDF](screenshots/4_download_pdf.png) |
+
+---
+
 ## Features
 
 - **PDF & DOCX support** — upload any text-based resume
